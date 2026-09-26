@@ -38,10 +38,10 @@ export const update = internalMutation({
     const now = Date.now();
     const patch = {
       status: args.status,
-      externalBuildId: args.externalBuildId,
-      artifactStorageId: args.artifactStorageId,
-      logsStorageId: args.logsStorageId,
-      error: args.error,
+      ...(args.externalBuildId !== undefined ? { externalBuildId: args.externalBuildId } : {}),
+      ...(args.artifactStorageId !== undefined ? { artifactStorageId: args.artifactStorageId } : {}),
+      ...(args.logsStorageId !== undefined ? { logsStorageId: args.logsStorageId } : {}),
+      ...(args.error !== undefined ? { error: args.error } : {}),
       ...(args.status === "running" ? { startedAt: now } : {}),
       ...(args.status === "success" || args.status === "failed" || args.status === "cancelled"
         ? { finishedAt: now }
