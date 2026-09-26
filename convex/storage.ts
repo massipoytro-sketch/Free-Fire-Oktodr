@@ -43,9 +43,7 @@ export const finalizeUpload = action({
   handler: async (ctx, args) => {
     requireSetupToken(args.setupToken);
 
-    const stored = await ctx.runQuery(internal.storage.getStoredMetadata, {
-      storageId: args.storageId,
-    });
+    const stored = await ctx.storage.getMetadata(args.storageId);
 
     if (!stored) {
       throw new Error("Uploaded object was not found");
@@ -77,12 +75,6 @@ export const getObjectUrl = query({
   },
 });
 
-export const getStoredMetadata = internalQuery({
-  args: { storageId: v.id("_storage") },
-  handler: async (ctx, { storageId }) => {
-    return await ctx.db.system.get(storageId);
-  },
-});
 
 export const registerObject = internalMutation({
   args: {
