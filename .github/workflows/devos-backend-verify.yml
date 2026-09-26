@@ -46,6 +46,9 @@ jobs:
           CONVEX_AGENT_MODE: anonymous
         run: pnpm exec convex dev --once
 
+      - name: Build Remix server types
+        run: pnpm run build
+
       - name: Typecheck
         run: pnpm run typecheck
 
