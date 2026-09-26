@@ -1,0 +1,62 @@
+name: DevOS Backend Verify
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "convex/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/devos-backend-verify.yml"
+  pull_request:
+    paths:
+      - "convex/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+          run_install: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Generate and validate Convex backend
+        env:
+          CONVEX_AGENT_MODE: anonymous
+        run: pnpm exec convex dev --once
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Commit lockfile sync
+        run: |
+          if git diff --quiet -- pnpm-lock.yaml; then
+            echo "Lockfile already synchronized."
+            exit 0
+          fi
+          git config user.name "devos-ci"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pnpm-lock.yaml
+          git commit -m "chore(devos): sync pnpm lockfile"
+          git push
