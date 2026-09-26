@@ -35,9 +35,11 @@ export const update = internalMutation({
     const now = Date.now();
     await ctx.db.patch(args.id, {
       status: args.status,
-      externalDeploymentId: args.externalDeploymentId,
-      url: args.url,
-      error: args.error,
+      ...(args.externalDeploymentId !== undefined
+        ? { externalDeploymentId: args.externalDeploymentId }
+        : {}),
+      ...(args.url !== undefined ? { url: args.url } : {}),
+      ...(args.error !== undefined ? { error: args.error } : {}),
       ...(args.status === "running" ? { startedAt: now } : {}),
       ...(args.status === "success" || args.status === "failed" || args.status === "cancelled"
         ? { finishedAt: now }
