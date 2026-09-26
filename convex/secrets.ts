@@ -35,11 +35,11 @@ export const upsertSecret = internalAction({
       name: args.name,
       provider: args.provider,
       kind: args.kind,
-      projectId: args.projectId,
+      ...(args.projectId !== undefined ? { projectId: args.projectId } : {}),
       ciphertext: encrypted.ciphertext,
       iv: encrypted.iv,
       authTag: encrypted.authTag,
-      note: args.note,
+      ...(args.note !== undefined ? { note: args.note } : {}),
     });
   },
 });
