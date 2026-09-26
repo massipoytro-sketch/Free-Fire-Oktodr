@@ -2,6 +2,7 @@
 
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";
 import { internal } from "./_generated/api";
+import type { Id } from "./_generated/dataModel";
 import { internalAction } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -11,7 +12,11 @@ function masterKey() {
   return createHash("sha256").update(raw, "utf8").digest();
 }
 
-function encryptSecret(plaintext) {
+function encryptSecret(plaintext: string): {
+  ciphertext: string;
+  iv: string;
+  authTag: string;
+} {
   const iv = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", masterKey(), iv);
   const ciphertext = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
@@ -22,7 +27,7 @@ function encryptSecret(plaintext) {
   };
 }
 
-function decryptSecret(ciphertext, iv, authTag) {
+function decryptSecret(ciphertext: string, iv: string, authTag: string): string {
   const decipher = createDecipheriv("aes-256-gcm", masterKey(), Buffer.from(iv, "base64"));
   decipher.setAuthTag(Buffer.from(authTag, "base64"));
   return Buffer.concat([
@@ -48,7 +53,7 @@ export const upsertSecret = internalAction({
     plaintext: v.string(),
     note: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<Id<"secrets">> => {
     const encrypted = encryptSecret(args.plaintext);
     return await ctx.runMutation(internal.secretStore.storeEncrypted, {
       name: args.name,
@@ -65,7 +70,7 @@ export const upsertSecret = internalAction({
 
 export const readSecret = internalAction({
   args: { secretId: v.id("secrets") },
-  handler: async (ctx, { secretId }) => {
+  handler: async (ctx, { secretId }): Promise<string> => {
     const secret = await ctx.runQuery(internal.secretStore.getCurrent, { secretId });
     if (!secret) throw new Error("Secret not found");
     return decryptSecret(secret.ciphertext, secret.iv, secret.authTag);
