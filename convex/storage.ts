@@ -1,6 +1,7 @@
 import { internal } from "./_generated/api";
 import { action, internalMutation, internalQuery, query } from "./_generated/server";
 import { v } from "convex/values";
+import type { Id } from "./_generated/dataModel";
 
 function requireSetupToken(token: string) {
   const expected = process.env.DEVOS_SETUP_TOKEN;
@@ -40,7 +41,7 @@ export const finalizeUpload = action({
     contentType: v.optional(v.string()),
     metadata: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<Id<"storageObjects">> => {
     requireSetupToken(args.setupToken);
 
     const stored = await ctx.storage.getMetadata(args.storageId);
