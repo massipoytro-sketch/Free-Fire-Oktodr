@@ -70,10 +70,12 @@ export const list = internalQuery({
         .take(limit);
     }
 
-    if (args.provider) {
+    const provider = args.provider;
+
+    if (provider) {
       return await ctx.db
         .query("connections")
-        .withIndex("by_provider", (q) => q.eq("provider", args.provider))
+        .withIndex("by_provider", (q) => q.eq("provider", provider))
         .order("desc")
         .take(limit);
     }
