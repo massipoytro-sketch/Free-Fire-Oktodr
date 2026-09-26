@@ -188,7 +188,7 @@ This option requires Docker and is great when you want an isolated environment o
 
    # Production image (self-contained build artifacts)
    pnpm run dockerbuild:prod
-   # ≈ docker build -t devos:production -t devos:latest --target bolt-ai-production .
+   # ≈ docker build -t devos:production -t devos:latest --target devos-production .
    ```
 
 3. **Run the Container**
