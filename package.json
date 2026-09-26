@@ -109,6 +109,7 @@
     "@xterm/xterm": "^5.5.0",
     "ai": "4.3.16",
     "chalk": "^5.4.1",
+    "convex": "1.46.0",
     "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
