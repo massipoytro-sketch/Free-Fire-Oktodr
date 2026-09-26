@@ -1,14 +1,13 @@
 {
-  "name": "bolt",
-  "description": "An AI Agent",
+  "name": "devos",
+  "description": "DevOS — AI Development Operating System",
   "private": true,
   "license": "MIT",
   "sideEffects": false,
   "type": "module",
   "version": "1.0.0",
   "author": {
-    "name": "bolt.diy team",
-    "email": "maintainers@bolt.diy"
+    "name": "DevOS"
   },
   "scripts": {
     "deploy": "npm run build && wrangler pages deploy",
