@@ -63,3 +63,29 @@ jobs:
           git add pnpm-lock.yaml
           git commit -m "chore(devos): sync pnpm lockfile"
           git push
+
+  deploy:
+    name: Deploy Convex Cloud
+    needs: verify
+    if: ${{ env.CONVEX_DEPLOY_KEY != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.14.4
+          run_install: false
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+      - name: Deploy Convex functions
+        run: pnpm exec convex deploy
