@@ -1,4 +1,4 @@
-# Project management of bolt.diy
+# Project management of DevOS
 
 First off: this sounds funny, we know. "Project management" comes from a world of enterprise stuff and this project is
 far from being enterprisy- it's still anarchy all over the place 😉
