@@ -6,6 +6,7 @@ import { themeStore } from './lib/stores/theme';
 import { stripIndents } from './utils/stripIndent';
 import { createHead } from 'remix-island';
 import { useEffect } from 'react';
+import { ConvexProvider, ConvexReactClient } from 'convex/react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ClientOnly } from 'remix-utils/client-only';
@@ -71,6 +72,17 @@ export const Head = createHead(() => (
   </>
 ));
 
+function ConvexBridge({ children }: { children: React.ReactNode }) {
+  const url = import.meta.env.VITE_CONVEX_URL as string | undefined;
+
+  if (!url) {
+    return <>{children}</>;
+  }
+
+  const client = new ConvexReactClient(url);
+  return <ConvexProvider client={client}>{children}</ConvexProvider>;
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const theme = useStore(themeStore);
 
@@ -80,7 +92,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <ClientOnly>{() => <DndProvider backend={HTML5Backend}>{children}</DndProvider>}</ClientOnly>
+      <ClientOnly>
+        {() => (
+          <ConvexBridge>
+            <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+          </ConvexBridge>
+        )}
+      </ClientOnly>
       <ToastContainer
         closeButton={({ closeToast }) => {
           return (
