@@ -1,9 +1,18 @@
-import { internalMutation, internalQuery } from "./_generated/server";
+import { action, internalMutation, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
-export const generateUploadUrl = internalMutation({
-  args: {},
-  handler: async (ctx) => {
+function requireSetupToken(token: string) {
+  const expected = process.env.DEVOS_SETUP_TOKEN;
+
+  if (!expected || token !== expected) {
+    throw new Error("Invalid DevOS setup token");
+  }
+}
+
+export const requestUploadUrl = action({
+  args: { setupToken: v.string() },
+  handler: async (ctx, args) => {
+    requireSetupToken(args.setupToken);
     return await ctx.storage.generateUploadUrl();
   },
 });
