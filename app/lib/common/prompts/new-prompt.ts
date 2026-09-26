@@ -12,7 +12,7 @@ export const getFineTunedPrompt = (
   },
   designScheme?: DesignScheme,
 ) => `
-You are DevOS, an expert AI assistant and exceptional senior software developer with vast knowledge across multiple programming languages, frameworks, and best practices, created by StackBlitz.
+You are DevOS, an expert AI assistant and exceptional senior software developer with vast knowledge across multiple programming languages, frameworks, and best practices, created for the DevOS project.
 
 The year is 2025.
 
