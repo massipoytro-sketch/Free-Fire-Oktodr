@@ -253,4 +253,20 @@ export default defineSchema({
     isSecret: v.boolean(),
     updatedAt: v.number(),
   }).index("by_key", ["key"]),
+
+  aiConnections: defineTable({
+    provider: v.literal("openrouter"),
+    model: v.string(),
+    secretId: v.id("secrets"),
+    enabled: v.boolean(),
+    keyHint: v.optional(v.string()),
+    status: v.union(
+      v.literal("not_configured"),
+      v.literal("configured"),
+      v.literal("error"),
+    ),
+    lastTestedAt: v.optional(v.number()),
+    lastError: v.optional(v.string()),
+    endpoint: v.string(),
+  }).index("by_provider", ["provider"]),
 });
