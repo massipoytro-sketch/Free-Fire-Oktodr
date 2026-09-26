@@ -1,4 +1,5 @@
-import { action, internalMutation, internalQuery } from "./_generated/server";
+import { internal } from "./_generated/api";
+import { action, internalMutation, internalQuery, query } from "./_generated/server";
 import { v } from "convex/values";
 
 function requireSetupToken(token: string) {
@@ -9,6 +10,16 @@ function requireSetupToken(token: string) {
   }
 }
 
+const storageKind = v.union(
+  v.literal("project_file"),
+  v.literal("snapshot"),
+  v.literal("archive"),
+  v.literal("build_artifact"),
+  v.literal("export"),
+  v.literal("log"),
+  v.literal("ai_output"),
+);
+
 export const requestUploadUrl = action({
   args: { setupToken: v.string() },
   handler: async (ctx, args) => {
@@ -17,20 +28,68 @@ export const requestUploadUrl = action({
   },
 });
 
+export const finalizeUpload = action({
+  args: {
+    setupToken: v.string(),
+    projectId: v.optional(v.id("projects")),
+    versionId: v.optional(v.id("versions")),
+    storageId: v.id("_storage"),
+    kind: storageKind,
+    path: v.optional(v.string()),
+    fileName: v.string(),
+    contentType: v.optional(v.string()),
+    metadata: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    requireSetupToken(args.setupToken);
+
+    const stored = await ctx.runQuery(internal.storage.getStoredMetadata, {
+      storageId: args.storageId,
+    });
+
+    if (!stored) {
+      throw new Error("Uploaded object was not found");
+    }
+
+    return await ctx.runMutation(internal.storage.registerObject, {
+      projectId: args.projectId,
+      versionId: args.versionId,
+      storageId: args.storageId,
+      kind: args.kind,
+      path: args.path,
+      fileName: args.fileName,
+      contentType: args.contentType ?? stored.contentType ?? undefined,
+      sizeBytes: stored.size,
+      sha256: stored.sha256,
+      metadata: args.metadata,
+    });
+  },
+});
+
+export const getObjectUrl = query({
+  args: {
+    setupToken: v.string(),
+    storageId: v.id("_storage"),
+  },
+  handler: async (ctx, args) => {
+    requireSetupToken(args.setupToken);
+    return await ctx.storage.getUrl(args.storageId);
+  },
+});
+
+export const getStoredMetadata = internalQuery({
+  args: { storageId: v.id("_storage") },
+  handler: async (ctx, { storageId }) => {
+    return await ctx.db.system.get(storageId);
+  },
+});
+
 export const registerObject = internalMutation({
   args: {
     projectId: v.optional(v.id("projects")),
     versionId: v.optional(v.id("versions")),
     storageId: v.id("_storage"),
-    kind: v.union(
-      v.literal("project_file"),
-      v.literal("snapshot"),
-      v.literal("archive"),
-      v.literal("build_artifact"),
-      v.literal("export"),
-      v.literal("log"),
-      v.literal("ai_output"),
-    ),
+    kind: storageKind,
     path: v.optional(v.string()),
     fileName: v.string(),
     contentType: v.optional(v.string()),
