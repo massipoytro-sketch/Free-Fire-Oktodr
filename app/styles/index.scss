@@ -71,3 +71,58 @@ body {
   // Firefox support for inverted colors
   scrollbar-color: color-mix(in srgb, var(--bolt-elements-textPrimary), transparent 50%) transparent;
 }
+
+
+/* DevOS mobile shell */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100dvh;
+  overscroll-behavior-y: none;
+}
+
+.devos-mobile-nav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --header-height: 56px;
+    --chat-max-width: 100%;
+    --chat-min-width: 0px;
+    --workbench-width: 100%;
+    --workbench-inner-width: 100%;
+    --workbench-left: 0px;
+  }
+
+  .devos-mobile-nav {
+    display: block;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    touch-action: manipulation;
+  }
+
+  .Toastify__toast-container {
+    left: 0.75rem !important;
+    right: 0.75rem !important;
+    bottom: calc(5.25rem + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+  }
+
+  .Toastify__toast {
+    margin-bottom: 0.5rem;
+    border-radius: 1rem;
+  }
+}
