@@ -28,8 +28,6 @@ export const upsert = internalMutation({
           .unique()
       : null;
 
-    const now = Date.now();
-
     if (existing) {
       await ctx.db.patch(existing._id, {
         displayName: args.displayName,
@@ -43,9 +41,14 @@ export const upsert = internalMutation({
     }
 
     return await ctx.db.insert("connections", {
-      ...args,
-      lastValidatedAt: undefined,
+      provider: args.provider,
+      displayName: args.displayName,
+      authType: args.authType,
+      projectId: args.projectId,
+      secretId: args.secretId,
+      externalAccountId: args.externalAccountId,
       metadata: args.metadata,
+      enabled: args.enabled,
     });
   },
 });
