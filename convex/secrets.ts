@@ -1,4 +1,5 @@
 import { internal } from "./_generated/api";
+import type { Id } from "./_generated/dataModel";
 import { internalAction } from "./_generated/server";
 import { v } from "convex/values";
 import { decryptSecretValue, encryptSecretValue } from "./crypto";
@@ -28,7 +29,7 @@ export const upsertSecret = internalAction({
     plaintext: v.string(),
     note: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<Id<"secrets">> => {
     const encrypted = await encryptSecretValue(args.plaintext, masterSecret());
 
     return await ctx.runMutation(internal.secretStore.storeEncrypted, {
