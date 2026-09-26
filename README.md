@@ -6,7 +6,7 @@ DevOS is an AI-powered development environment for building, running, testing, a
 
 # DevOS
 
-[![DevOS: AI-Powered Full-Stack Web Development in the Browser](./public/social_preview_index.jpg)](https://DevOS)
+[![DevOS: AI-Powered Full-Stack Web Development in the Browser](./public/social_preview_index.jpg)](https://github.com/massipoytro-sketch/Free-Fire-Oktodr)
 
 Welcome to DevOS, an independent AI development environment for building and shipping software with AI. Currently, you can use OpenAI, Anthropic, Ollama, OpenRouter, Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, Groq, Cohere, Together, Perplexity, Moonshot (Kimi), Hyperbolic, GitHub Models, Amazon Bedrock, and OpenAI-like providers - and it is easily extended to use any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
 
