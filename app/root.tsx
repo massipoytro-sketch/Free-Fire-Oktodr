@@ -5,8 +5,9 @@ import tailwindReset from '@unocss/reset/tailwind-compat.css?url';
 import { themeStore } from './lib/stores/theme';
 import { stripIndents } from './utils/stripIndent';
 import { createHead } from 'remix-island';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ConvexProvider, ConvexReactClient } from 'convex/react';
+import { MobileNav } from './components/mobile/MobileNav';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ClientOnly } from 'remix-utils/client-only';
@@ -79,7 +80,7 @@ function ConvexBridge({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  const client = new ConvexReactClient(url);
+  const client = useMemo(() => new ConvexReactClient(url), [url]);
   return <ConvexProvider client={client}>{children}</ConvexProvider>;
 }
 
@@ -99,6 +100,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </ConvexBridge>
         )}
       </ClientOnly>
+      <MobileNav />
       <ToastContainer
         closeButton={({ closeToast }) => {
           return (
