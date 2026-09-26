@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: bolt-ai-production
+      target: devos-production
     ports:
       - '5173:5173'
     env_file: 
@@ -36,7 +36,7 @@ services:
       - production
 
   app-dev:
-    image: bolt-ai:development
+    image: devos:development
     build:
       context: .
       dockerfile: Dockerfile
