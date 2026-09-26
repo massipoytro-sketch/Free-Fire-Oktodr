@@ -1,0 +1,42 @@
+name: Import bolt.diy into this repository
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    if: startsWith(github.event.head_commit.message, 'DEVOS_IMPORT_BOOTSTRAP')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Clone bolt.diy
+        run: |
+          git clone --depth 1 https://github.com/stackblitz-labs/bolt.diy.git /tmp/bolt-diy
+          rm -rf /tmp/bolt-diy/.git
+
+      - name: Replace target repository with bolt.diy
+        run: |
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a /tmp/bolt-diy/. .
+
+      - name: Commit imported source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Import bolt.diy source"
+          git push origin HEAD:main
