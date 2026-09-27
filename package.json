@@ -204,7 +204,9 @@
     "vite-plugin-optimize-css-modules": "^1.1.0",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^2.1.7",
-    "wrangler": "^4.44.0"
+    "wrangler": "^4.44.0",
+    "@types/js-cookie": "^3.0.6",
+    "@types/path-browserify": "^1.0.3"
   },
   "resolutions": {
     "@typescript-eslint/utils": "^8.0.0-alpha.30"
