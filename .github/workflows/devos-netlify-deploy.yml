@@ -41,4 +41,4 @@ jobs:
         run: pnpm run build
 
       - name: Deploy to Netlify production
-        run: pnpm dlx netlify-cli deploy --prod --dir=build/client --site="$NETLIFY_SITE_ID"
+        run: pnpm --package=netlify-cli dlx netlify deploy --prod --dir=build/client --site="$NETLIFY_SITE_ID"
