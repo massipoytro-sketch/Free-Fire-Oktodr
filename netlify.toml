@@ -1,0 +1,19 @@
+[build]
+  command = "pnpm run build"
+  publish = "build/client"
+
+[build.environment]
+  NODE_VERSION = "22"
+  PNPM_VERSION = "9.14.4"
+  VITE_CONVEX_URL = "https://flexible-lobster-961.eu-west-1.convex.cloud"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
