@@ -18,6 +18,7 @@ jobs:
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: "8d5e3b6e-4d58-408f-9446-e906e841bcdb"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,10 +36,26 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Build DevOS
         run: pnpm run build
 
+      - name: Check Netlify credentials
+        id: netlify_auth
+        run: |
+          if [ -n "$NETLIFY_AUTH_TOKEN" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "Netlify credentials are configured."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "NETLIFY_AUTH_TOKEN is not configured; skipping Netlify deployment."
+          fi
+
       - name: Deploy to Netlify production
+        if: steps.netlify_auth.outputs.ready == 'true'
         run: pnpm --package=netlify-cli dlx netlify deploy --prod --dir=build/client --site="$NETLIFY_SITE_ID"
+
+      - name: Netlify deployment skipped
+        if: steps.netlify_auth.outputs.ready != 'true'
+        run: echo "Build verified successfully. Netlify deployment was skipped because NETLIFY_AUTH_TOKEN is missing."
