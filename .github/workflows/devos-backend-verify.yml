@@ -1,26 +1,34 @@
-name: DevOS Backend Verify
+name: DevOS Build Verify
 
 on:
   push:
     branches: [main]
     paths:
+      - "app/**"
       - "convex/**"
       - "package.json"
       - "pnpm-lock.yaml"
+      - "vite.config.ts"
+      - "tsconfig.json"
       - ".github/workflows/devos-backend-verify.yml"
   pull_request:
+    branches: [main]
     paths:
+      - "app/**"
       - "convex/**"
       - "package.json"
       - "pnpm-lock.yaml"
+      - "vite.config.ts"
+      - "tsconfig.json"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   verify:
+    name: Build and Typecheck
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -39,48 +47,10 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --ignore-scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Build Remix server types
+      - name: Build
         run: pnpm run build
 
       - name: Typecheck
         run: pnpm run typecheck
-
-      - name: Commit lockfile sync
-        run: |
-          if git diff --quiet -- pnpm-lock.yaml; then
-            echo "Lockfile already synchronized."
-            exit 0
-          fi
-          git config user.name "devos-ci"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add pnpm-lock.yaml
-          git commit -m "chore(devos): sync pnpm lockfile"
-          git push
-
-  deploy:
-    name: Deploy Convex Cloud
-    needs: verify
-    if: ${{ env.CONVEX_DEPLOY_KEY != '' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    env:
-      CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Enable pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.14.4
-          run_install: false
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile --ignore-scripts
-      - name: Deploy Convex functions
-        run: pnpm exec convex deploy
